@@ -1,22 +1,39 @@
 # ⚡ Genius-System-Alpha
 
-> **Engineering the impossible through elite code. This isn't just a repository; it's the blueprint of a digital revolution.**
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=39FF14&center=true&vCenter=true&width=435&lines=Initializing+Genius+System...;Welcome+F.H.+Hussain;The+Digital+Revolution+is+Here;System+Status:+Online" alt="Typing SVG" />
+</p>
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=fhhussain5653-sudo&label=SYSTEM+ACCESSES&color=39FF14&style=flat" alt="Visitor Counter" />
+</p>
 
 ---
 
-### 🧠 System Overview
-Welcome to the core of innovation. **Genius-System-Alpha** is designed to be the foundation for high-performance digital ecosystems. This repository serves as the central hub for:
-* **Advanced Logic Processing**
-* **Scalable Architecture Design**
-* **Next-Gen Algorithm Implementation**
+### 🧠 System Intelligence
+> **"Engineering the impossible through elite code."**
+
+* 🟢 **Core:** Active
+* 🟢 **Logic:** Advanced
+* 🟢 **Security:** sudo-access granted
+
+---
+
+### 📊 Performance Metrics
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=fhhussain5653-sudo&show_icons=true&theme=tokyonight&hide_border=true" alt="GitHub Stats" />
+</p>
+
+---
 
 ### 🛠️ Technical Arsenal
-| Category | Tools & Tech |
+| Category | Tools |
 | :--- | :--- |
-| **Languages** | Python, JavaScript, C++, SQL |
-| **Frameworks** | React, Node.js, Django |
-| **Architecture** | Microservices, Cloud Native |
-| **Operating Systems** | Linux (sudo power), Unix |
+| **Active Code** | `core.py` |
+| **Environment** | Linux / Cloud |
+| **Access Level** | Root / Sudo |
 
 ---
-*"The best way to predict the future is to code it."*
+<p align="right">
+  <i>"The best way to predict the future is to code it."</i>
+</p>
