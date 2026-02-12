@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genius World Clock</title>
+    <title>Genius Dynamic World Clock</title>
     <style>
-        /* Modern UI Design */
         :root {
             --bg: #0a0e14;
             --card: rgba(255, 255, 255, 0.05);
@@ -14,10 +13,9 @@
         }
 
         body {
-            background-color: var(--bg);
             background: radial-gradient(circle at center, #1a202c 0%, #0a0e14 100%);
             color: var(--text);
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -28,61 +26,90 @@
 
         h1 {
             font-weight: 200;
-            letter-spacing: 5px;
-            text-transform: uppercase;
+            letter-spacing: 4px;
             color: var(--accent);
-            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+            text-transform: uppercase;
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
+        /* Search & Controls Section */
+        .controls {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 30px;
             display: flex;
-            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        select {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #2d3748;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent);
+            color: #0a0e14;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Clocks Grid */
+        #clock-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            width: 100%;
+            max-width: 1000px;
         }
 
         .clock-card {
             background: var(--card);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 25px;
+            padding: 25px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .clock-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent);
+            position: relative;
         }
 
         .city {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #a0aec0;
-            margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
         .time {
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             font-weight: bold;
             font-family: 'Courier New', monospace;
-            color: var(--text);
             margin: 10px 0;
         }
 
         .date {
             color: var(--accent);
-            font-size: 1rem;
-            opacity: 0.8;
+            font-size: 0.9rem;
         }
 
-        /* Weather Placeholder */
-        .weather {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #4fd1c5;
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            color: #ff4d4d;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -90,42 +117,73 @@
 
     <h1>World Clock</h1>
 
-    <div class="container" id="clock-container">
-        <div class="clock-card">
-            <div class="city">PAKISTAN (KARACHI)</div>
-            <div id="khi-time" class="time">00:00:00</div>
-            <div id="khi-date" class="date">...</div>
-            <div class="weather">☀ 28°C - Clear Sky</div>
-        </div>
-
-        <div class="clock-card">
-            <div class="city">UNITED KINGDOM (LONDON)</div>
-            <div id="ldn-time" class="time">00:00:00</div>
-            <div id="ldn-date" class="date">...</div>
-            <div class="weather">☁ 8°C - Cloudy</div>
-        </div>
+    <div class="controls">
+        <select id="tz-select">
+            <option value="Asia/Karachi">Pakistan (Karachi)</option>
+            <option value="Europe/London">UK (London)</option>
+            <option value="America/New_York">USA (New York)</option>
+            <option value="Asia/Dubai">UAE (Dubai)</option>
+            <option value="Asia/Tokyo">Japan (Tokyo)</option>
+            <option value="Australia/Sydney">Australia (Sydney)</option>
+            <option value="Europe/Paris">France (Paris)</option>
+        </select>
+        <button onclick="addClock()">Add</button>
     </div>
 
-    <script>
-        function updateTime() {
-            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            
-            // Karachi
-            const khi = new Date().toLocaleString("en-US", { ...options, timeZone: "Asia/Karachi" });
-            const khiDate = new Date().toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: "Asia/Karachi" });
-            document.getElementById('khi-time').textContent = khi;
-            document.getElementById('khi-date').textContent = khiDate;
+    <div id="clock-container"></div>
 
-            // London
-            const ldn = new Date().toLocaleString("en-US", { ...options, timeZone: "Europe/London" });
-            const ldnDate = new Date().toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: "Europe/London" });
-            document.getElementById('ldn-time').textContent = ldn;
-            document.getElementById('ldn-date').textContent = ldnDate;
+    <script>
+        let activeClocks = ['Asia/Karachi', 'Europe/London'];
+
+        function addClock() {
+            const tz = document.getElementById('tz-select').value;
+            if(!activeClocks.includes(tz)) {
+                activeClocks.push(tz);
+                renderClocks();
+            }
         }
 
-        setInterval(updateTime, 1000);
-        updateTime();
+        function removeClock(tz) {
+            activeClocks = activeClocks.filter(item => item !== tz);
+            renderClocks();
+        }
+
+        function renderClocks() {
+            const container = document.getElementById('clock-container');
+            container.innerHTML = '';
+            activeClocks.forEach(tz => {
+                const card = document.createElement('div');
+                card.className = 'clock-card';
+                card.innerHTML = `
+                    <button class="remove-btn" onclick="removeClock('${tz}')">×</button>
+                    <div class="city">${tz.split('/')[1].replace('_', ' ')}</div>
+                    <div class="time" id="time-${tz}">00:00:00</div>
+                    <div class="date" id="date-${tz}">...</div>
+                `;
+                container.appendChild(card);
+            });
+            updateTimes();
+        }
+
+        function updateTimes() {
+            activeClocks.forEach(tz => {
+                const now = new Date();
+                const timeStr = now.toLocaleString("en-US", { 
+                    timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+                });
+                const dateStr = now.toLocaleString("en-US", { 
+                    timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' 
+                });
+                
+                const timeEl = document.getElementById(`time-${tz}`);
+                const dateEl = document.getElementById(`date-${tz}`);
+                if(timeEl) timeEl.textContent = timeStr;
+                if(dateEl) dateEl.textContent = dateStr;
+            });
+        }
+
+        setInterval(updateTimes, 1000);
+        renderClocks();
     </script>
 </body>
-  </html>
-  
+</html>
