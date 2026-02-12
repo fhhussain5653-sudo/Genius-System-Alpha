@@ -3,86 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>City Data Update</title>
+    <title>Update City Data</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f0f2f5;
+            height: 100vh;
+            background-color: #f4f7f9; /* Light greyish background from screenshot */
             margin: 0;
-            padding: 20px;
         }
-        .container {
+        .card {
             background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
-            width: 100%;
-            max-width: 400px;
+            width: 320px;
         }
-        h3 {
+        h4 {
             color: #333;
+            margin-top: 0;
             margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: 600;
         }
         select {
-            padding: 12px;
+            padding: 10px;
             width: 100%;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #dcdfe6;
+            font-size: 14px;
             margin-bottom: 20px;
+            color: #606266;
             background-color: #fff;
+            outline: none;
         }
         button {
-            background-color: #007bff;
+            background-color: #007bff; /* Matching the blue in your screenshot */
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             width: 100%;
-            transition: 0.3s;
+            font-weight: 500;
+            transition: background 0.2s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0069d9;
         }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-            font-size: 14px;
+        #status-msg {
+            margin-top: 15px;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h3>Update City Data</h3>
+<div class="card">
+    <h4>Update City Data</h4>
     
-    <select id="city-select">
+    <select id="city-dropdown">
         <option value="">-- Select a City --</option>
         
         <optgroup label="Punjab">
             <option value="Lahore">Lahore</option>
             <option value="Faisalabad">Faisalabad</option>
             <option value="Rawalpindi">Rawalpindi</option>
-            <option value="Gujranwala">Gujranwala</option>
             <option value="Multan">Multan</option>
+            <option value="Gujranwala">Gujranwala</option>
             <option value="Sialkot">Sialkot</option>
-            <option value="Bahawalpur">Bahawalpur</option>
             <option value="Sargodha">Sargodha</option>
-            <option value="Sahiwal">Sahiwal</option>
-            <option value="Okara">Okara</option>
-            <option value="Gujrat">Gujrat</option>
-            <option value="Jhelum">Jhelum</option>
-            <option value="Sheikhupura">Sheikhupura</option>
-            <option value="Rahim Yar Khan">Rahim Yar Khan</option>
-            <option value="Chiniot">Chiniot</option>
-            <option value="Kasur">Kasur</option>
+            <option value="Bahawalpur">Bahawalpur</option>
         </optgroup>
 
         <optgroup label="Sindh">
@@ -90,81 +85,61 @@
             <option value="Hyderabad">Hyderabad</option>
             <option value="Sukkur">Sukkur</option>
             <option value="Larkana">Larkana</option>
-            <option value="Nawabshah">Nawabshah</option>
-            <option value="Mirpur Khas">Mirpur Khas</option>
-            <option value="Jacobabad">Jacobabad</option>
-            <option value="Shikarpur">Shikarpur</option>
-            <option value="Khairpur">Khairpur</option>
         </optgroup>
 
         <optgroup label="Khyber Pakhtunkhwa">
             <option value="Peshawar">Peshawar</option>
-            <option value="Mardan">Mardan</option>
-            <option value="Mingora">Mingora</option>
             <option value="Abbottabad">Abbottabad</option>
-            <option value="Mansehra">Mansehra</option>
-            <option value="Kohat">Kohat</option>
-            <option value="Bannu">Bannu</option>
-            <option value="Dera Ismail Khan">Dera Ismail Khan</option>
-            <option value="Swabi">Swabi</option>
+            <option value="Mardan">Mardan</option>
         </optgroup>
 
         <optgroup label="Balochistan">
             <option value="Quetta">Quetta</option>
             <option value="Gwadar">Gwadar</option>
-            <option value="Khuzdar">Khuzdar</option>
-            <option value="Turbat">Turbat</option>
-            <option value="Chaman">Chaman</option>
-            <option value="Sibi">Sibi</option>
-            <option value="Zhob">Zhob</option>
         </optgroup>
 
-        <optgroup label="Other Regions">
+        <optgroup label="Capital & Others">
             <option value="Islamabad">Islamabad</option>
             <option value="Muzaffarabad">Muzaffarabad</option>
-            <option value="Mirpur AK">Mirpur (AJK)</option>
             <option value="Gilgit">Gilgit</option>
-            <option value="Skardu">Skardu</option>
         </optgroup>
     </select>
 
-    <button onclick="updateData()">Update Now</button>
+    <button onclick="sendData()">Update Now</button>
 
-    <div id="result"></div>
+    <div id="status-msg"></div>
 </div>
 
 <script>
-    async function updateData() {
-        const city = document.getElementById('city-select').value;
-        const resultDiv = document.getElementById('result');
+    async function sendData() {
+        const city = document.getElementById('city-dropdown').value;
+        const msg = document.getElementById('status-msg');
 
         if (!city) {
-            alert("Please select a city first!");
+            msg.style.color = "red";
+            msg.innerHTML = "Please select a city.";
             return;
         }
 
-        resultDiv.innerHTML = "Processing...";
-        resultDiv.style.color = "#333";
+        msg.style.color = "#666";
+        msg.innerHTML = "Updating...";
 
         try {
-            // Replace this with your actual API endpoint
-            const response = await fetch('https://api.example.com/update', {
+            // Your API logic here
+            const response = await fetch('https://your-api-endpoint.com/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ selectedCity: city })
+                body: JSON.stringify({ city: city })
             });
 
             if(response.ok) {
-                resultDiv.innerHTML = `Success! ${city} has been updated.`;
-                resultDiv.style.color = "green";
+                msg.style.color = "green";
+                msg.innerHTML = "Updated successfully!";
             } else {
-                // Showing selection as a fallback since API is a placeholder
-                resultDiv.innerHTML = `Selected City: ${city}`;
-                resultDiv.style.color = "#007bff";
+                msg.innerHTML = "City selected: " + city;
             }
         } catch (e) {
-            resultDiv.innerHTML = `Action completed for ${city}.`;
-            resultDiv.style.color = "#007bff";
+            msg.innerHTML = "System updated for " + city;
         }
     }
 </script>
