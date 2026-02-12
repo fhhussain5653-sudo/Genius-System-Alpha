@@ -3,140 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genius System Alpha</title>
+    <title>Genius World Clock & Weather</title>
     <style>
-        /* CSS: Screenshot design match */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f7f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             margin: 0;
         }
 
-        .card {
-            background: #ffffff;
-            padding: 30px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            width: 320px;
+            width: 350px;
         }
 
-        h4 {
-            margin-bottom: 20px;
-            font-size: 16px;
+        .clock {
+            font-size: 48px;
+            font-weight: bold;
             color: #333;
+            margin-bottom: 10px;
         }
+
+        .weather-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #eef2f3;
+            border-radius: 12px;
+        }
+
+        .temp { font-size: 24px; color: #007bff; font-weight: bold; }
 
         select {
             width: 100%;
             padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-            font-size: 14px;
-            outline: none;
+            margin: 20px 0 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
         }
 
-        button {
-            background-color: #007bff; /* Screenshot Blue */
+        .btn-update {
+            background: #007bff;
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 6px;
             width: 100%;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
         }
 
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #status {
-            margin-top: 15px;
-            font-size: 12px;
-        }
+        #status { font-size: 12px; margin-top: 10px; color: #666; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h4>Update City Data</h4>
-    
+<div class="container">
+    <div class="clock" id="clock">00:00:00</div>
+    <div id="city-name" style="font-weight: bold; color: #555;">Karachi, PK</div>
+
+    <div class="weather-info" id="weather-box">
+        <div class="temp" id="temp">--°C</div>
+        <div id="desc">Loading weather...</div>
+    </div>
+
     <select id="citySelect">
-        <option value="">-- Select a City --</option>
-        <optgroup label="Punjab">
-            <option value="Lahore">Lahore</option>
-            <option value="Faisalabad">Faisalabad</option>
-            <option value="Rawalpindi">Rawalpindi</option>
-            <option value="Multan">Multan</option>
-            <option value="Gujranwala">Gujranwala</option>
-        </optgroup>
-        <optgroup label="Sindh">
-            <option value="Karachi">Karachi</option>
-            <option value="Hyderabad">Hyderabad</option>
-            <option value="Sukkur">Sukkur</option>
-        </optgroup>
-        <optgroup label="KPK">
-            <option value="Peshawar">Peshawar</option>
-            <option value="Abbottabad">Abbottabad</option>
-        </optgroup>
-        <optgroup label="Balochistan">
-            <option value="Quetta">Quetta</option>
-            <option value="Gwadar">Gwadar</option>
-        </optgroup>
-        <optgroup label="Federal">
-            <option value="Islamabad">Islamabad</option>
-        </optgroup>
+        <option value="Karachi">Karachi</option>
+        <option value="Lahore">Lahore</option>
+        <option value="Islamabad">Islamabad</option>
+        <option value="London">London</option>
+        <option value="New York">New York</option>
     </select>
-
-    <button onclick="updateData()">Update Now</button>
-
-    <div id="status"></div>
+    
+    <button class="btn-update" onclick="updateWeather()">Update Now</button>
+    <div id="status">Ready</div>
 </div>
 
 <script>
-    async function updateData() {
+    // 1. Digital Clock Logic
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+
+    // 2. Weather API Logic
+    async function updateWeather() {
         const city = document.getElementById('citySelect').value;
         const status = document.getElementById('status');
+        const apiKey = 'b71234c06f36603a1d95368a5c371f7a'; // Demo Key
 
-        if (!city) {
-            status.style.color = "red";
-            status.innerText = "Please select a city first.";
-            return;
-        }
-
-        status.style.color = "black";
-        status.innerText = "Updating API...";
+        status.innerText = "Syncing...";
 
         try {
-            // Fetch request with API Update
-            const response = await fetch('https://api.example.com/update-city', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    system: "Genius-System-Alpha",
-                    updatedCity: city 
-                })
-            });
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+            const data = await response.json();
 
-            if (response.ok) {
-                status.style.color = "green";
-                status.innerText = city + " updated successfully!";
+            if (data.main) {
+                document.getElementById('temp').innerText = Math.round(data.main.temp) + "°C";
+                document.getElementById('desc').innerText = data.weather[0].description;
+                document.getElementById('city-name').innerText = city + ", " + data.sys.country;
+                status.innerText = "Updated!";
             } else {
-                status.style.color = "blue";
-                status.innerText = "City selected: " + city;
+                status.innerText = "City not found.";
             }
-        } catch (error) {
-            status.style.color = "blue";
-            status.innerText = "Local update: " + city;
+        } catch (e) {
+            status.innerText = "Network Error.";
         }
     }
+
+    // Initial load
+    updateWeather();
+    updateClock();
 </script>
 
 </body>
