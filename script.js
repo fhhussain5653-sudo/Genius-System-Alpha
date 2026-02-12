@@ -1,68 +1,46 @@
-const popularTimezones = [
-    'Local', 'Asia/Karachi', 'Asia/Dubai', 'Europe/London', 
-    'America/New_York', 'Asia/Tokyo', 'Australia/Sydney'
-];
+const apiKey = "fa6eb14e1fbb21a9c7d653da083d9966"; // آپ کی کنفرم شدہ کی
 
-const clocksContainer = document.getElementById('clocks');
-const tzSelect = document.getElementById('tz-select');
-
-// Populate Dropdown
-popularTimezones.forEach(tz => {
-    const opt = document.createElement('option');
-    opt.value = tz;
-    opt.textContent = tz;
-    tzSelect.appendChild(opt);
-});
-
-function updateClocks() {
-    const cards = document.querySelectorAll('.card');
-    const now = new Date();
-
-    cards.forEach(card => {
-        const tz = card.dataset.timezone;
-        const timeEl = card.querySelector('.time');
-        const dateEl = card.querySelector('.date');
-
-        const options = {
-            timeZone: tz === 'Local' ? undefined : tz,
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: true
-        };
-
-        const dateOptions = {
-            timeZone: tz === 'Local' ? undefined : tz,
-            weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
-        };
-
-        timeEl.textContent = new Intl.DateTimeFormat('en-US', options).format(now);
-        dateEl.textContent = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
-    });
+async function fetchWeather(city) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+        const data = await response.json();
+        return data.cod === 200 ? `${data.main.temp}°C - ${data.weather[0].main}` : "Weather Error";
+    } catch {
+        return "N/A";
+    }
 }
 
-function addClock() {
-    const tz = tzSelect.value;
+async function addCity() {
+    const city = document.getElementById('citySelect').value;
+    const container = document.getElementById('clockContainer');
+    
+    const weather = await fetchWeather(city);
+    
     const card = document.createElement('div');
     card.className = 'card';
-    card.dataset.timezone = tz;
     card.innerHTML = `
-        <div class="tz-name">${tz.replace('_', ' ')}</div>
-        <div class="time">00:00:00</div>
-        <div class="date">Loading...</div>
-        <button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+        <span class="delete-btn" onclick="this.parentElement.remove()">×</span>
+        <div style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">${city}</div>
+        <div class="time" id="time-${city}">00:00:00</div>
+        <div class="weather">🌡️ ${weather}</div>
     `;
-    clocksContainer.appendChild(card);
-    updateClocks();
+    
+    container.appendChild(card);
+    updateTime(city);
 }
 
-// Initial Call & Interval
-setInterval(updateClocks, 1000);
-document.getElementById('add-btn').onclick = addClock;
+function updateTime(city) {
+    setInterval(() => {
+        const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        // یہاں آپ ٹائم زون بھی سیٹ کر سکتے ہیں، فی الحال یہ لوکل ٹائم دکھائے گا
+        const timeString = new Date().toLocaleTimeString('en-US', options);
+        const element = document.getElementById(`time-${city}`);
+        if(element) element.innerText = timeString;
+    }, 1000);
+}
 
-// Add local clock by default
+// ابتدائی طور پر کراچی اور لندن دکھانے کے لیے
 window.onload = () => {
-    tzSelect.value = 'Local';
-    addClock();
-    tzSelect.value = 'Asia/Karachi';
-    addClock();
+    document.getElementById('citySelect').value = "Karachi";
+    addCity();
 };
-})();
