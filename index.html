@@ -6,89 +6,68 @@
     <title>Genius System Alpha</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fb;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f8f9fb;
+            min-height: 100vh;
             margin: 0;
         }
-
         .card {
             background: #ffffff;
-            padding: 40px 30px;
+            padding: 35px 25px;
             border-radius: 24px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             text-align: center;
-            width: 350px;
+            width: 340px;
         }
-
         .time-display {
-            font-size: 54px;
+            font-size: 50px;
             font-weight: 600;
             color: #333;
             margin-bottom: 5px;
         }
-
         .location-label {
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-
-        .weather-card {
+        .weather-box {
             background-color: #f0f3f5;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 25px;
         }
-
-        .temperature {
+        .temp {
             font-size: 28px;
             font-weight: bold;
             color: #007bff;
-            margin-bottom: 5px;
         }
-
-        .weather-desc {
-            font-size: 16px;
-            color: #555;
-        }
-
         select {
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #e0e0e0;
-            font-size: 16px;
-            background-color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 15px;
             margin-bottom: 15px;
             outline: none;
-            color: #333;
         }
-
-        .btn-update {
+        button {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             width: 100%;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
         }
-
-        .btn-update:hover {
-            background-color: #0069d9;
-        }
-
         #status-msg {
             margin-top: 15px;
             font-size: 13px;
-            color: #999;
+            color: #888;
         }
     </style>
 </head>
@@ -96,11 +75,11 @@
 
 <div class="card">
     <div class="time-display" id="clock">00:00:00 PM</div>
-    <div class="location-label" id="current-city">Karachi, PK</div>
+    <div class="location-label" id="city-label">Karachi, PK</div>
 
-    <div class="weather-card">
-        <div class="temperature" id="temp-display">--°C</div>
-        <div class="weather-desc" id="weather-text">Loading weather...</div>
+    <div class="weather-box">
+        <div class="temp" id="temp-val">--°C</div>
+        <div id="weather-desc">Loading weather...</div>
     </div>
 
     <select id="cityInput">
@@ -113,62 +92,50 @@
         <option value="Peshawar">Peshawar</option>
     </select>
 
-    <button class="btn-update" onclick="fetchWeather()">Update Now</button>
-    <div id="status-msg">System Active</div>
+    <button onclick="updateSystem()">Update Now</button>
+    <div id="status-msg">System Ready</div>
 </div>
 
 <script>
-    // Real-time Clock Function
+    // آپ کی API Key
+    const apiKey = "fa6eb14e1fbb21a9c7d653da083d9966";
+
+    // گھڑی کا فنکشن
     function startClock() {
         setInterval(() => {
             const now = new Date();
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            let ampm = hours >= 12 ? 'PM' : 'AM';
-            
-            hours = hours % 12;
-            hours = hours ? hours : 12; 
-            minutes = minutes < 10 ? '0'+minutes : minutes;
-            seconds = seconds < 10 ? '0'+seconds : seconds;
-            
-            document.getElementById('clock').innerHTML = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
         }, 1000);
     }
 
-    // Weather API Function
-    async function fetchWeather() {
+    // ویدر API کا فنکشن
+    async function updateSystem() {
         const city = document.getElementById('cityInput').value;
-        const tempElement = document.getElementById('temp-display');
-        const descElement = document.getElementById('weather-text');
-        const cityLabel = document.getElementById('current-city');
         const status = document.getElementById('status-msg');
-
-        status.innerText = "Updating...";
+        
+        status.innerText = "Syncing...";
 
         try {
-            // Using a working public key for OpenWeatherMap
-            const apiKey = 'b71234c06f36603a1d95368a5c371f7a'; 
+            // 'fetch' کو چھوٹے f سے لکھا گیا ہے تاکہ ایرر نہ آئے
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},PK&appid=${apiKey}&units=metric`);
             const data = await response.json();
 
-            if (data.cod === 200) {
-                tempElement.innerText = Math.round(data.main.temp) + "°C";
-                descElement.innerText = data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1);
-                cityLabel.innerText = city + ", PK";
-                status.innerText = "Updated successfully";
+            if (data.cod == 200) {
+                document.getElementById('temp-val').innerText = Math.round(data.main.temp) + "°C";
+                document.getElementById('weather-desc').innerText = data.weather[0].description;
+                document.getElementById('city-label').innerText = city + ", PK";
+                status.innerText = "Updated successfully!";
             } else {
                 status.innerText = "City not found.";
             }
         } catch (error) {
-            status.innerText = "Check connection.";
-            console.error(error);
+            status.innerText = "Check your connection.";
         }
     }
 
-    // Initialize
+    // لوڈ ہونے پر سسٹم شروع کریں
     startClock();
-    fetchWeather();
+    updateSystem();
 </script>
 
 </body>
