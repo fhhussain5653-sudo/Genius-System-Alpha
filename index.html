@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multi Time Zone Digital Clock</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Multi Time Zone Clock</h1>
+
+    <div class="controls">
+      <label for="tz-select">Add time zone:</label>
+      <select id="tz-select"></select>
+      <button id="add-btn">Add</button>
+
+      <label for="format-toggle" class="toggle-label">
+        <input type="checkbox" id="format-toggle" />
+        12-hour
+      </label>
+    </div>
+
+    <section id="clocks" class="clocks"></section>
+
+    <footer class="footer">
+      Tip: Use IANA timezone names like "America/New_York", "Europe/London", "Asia/Tokyo".
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
