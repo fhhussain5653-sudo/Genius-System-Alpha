@@ -3,61 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update City Data</title>
+    <title>Genius System Alpha</title>
     <style>
+        /* CSS: Screenshot design match */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f7f9; /* Light greyish background from screenshot */
+            background-color: #f4f7f9;
             margin: 0;
         }
+
         .card {
             background: #ffffff;
-            padding: 25px;
+            padding: 30px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 320px;
         }
+
         h4 {
-            color: #333;
-            margin-top: 0;
             margin-bottom: 20px;
             font-size: 16px;
-            font-weight: 600;
+            color: #333;
         }
+
         select {
-            padding: 10px;
             width: 100%;
+            padding: 10px;
             border-radius: 6px;
-            border: 1px solid #dcdfe6;
-            font-size: 14px;
+            border: 1px solid #ccc;
             margin-bottom: 20px;
-            color: #606266;
-            background-color: #fff;
+            font-size: 14px;
             outline: none;
         }
+
         button {
-            background-color: #007bff; /* Matching the blue in your screenshot */
+            background-color: #007bff; /* Screenshot Blue */
             color: white;
             border: none;
             padding: 12px;
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
             width: 100%;
-            font-weight: 500;
-            transition: background 0.2s;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
         }
+
         button:hover {
-            background-color: #0069d9;
+            background-color: #0056b3;
         }
-        #status-msg {
+
+        #status {
             margin-top: 15px;
-            font-size: 13px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -66,80 +68,73 @@
 <div class="card">
     <h4>Update City Data</h4>
     
-    <select id="city-dropdown">
+    <select id="citySelect">
         <option value="">-- Select a City --</option>
-        
         <optgroup label="Punjab">
             <option value="Lahore">Lahore</option>
             <option value="Faisalabad">Faisalabad</option>
             <option value="Rawalpindi">Rawalpindi</option>
             <option value="Multan">Multan</option>
             <option value="Gujranwala">Gujranwala</option>
-            <option value="Sialkot">Sialkot</option>
-            <option value="Sargodha">Sargodha</option>
-            <option value="Bahawalpur">Bahawalpur</option>
         </optgroup>
-
         <optgroup label="Sindh">
             <option value="Karachi">Karachi</option>
             <option value="Hyderabad">Hyderabad</option>
             <option value="Sukkur">Sukkur</option>
-            <option value="Larkana">Larkana</option>
         </optgroup>
-
-        <optgroup label="Khyber Pakhtunkhwa">
+        <optgroup label="KPK">
             <option value="Peshawar">Peshawar</option>
             <option value="Abbottabad">Abbottabad</option>
-            <option value="Mardan">Mardan</option>
         </optgroup>
-
         <optgroup label="Balochistan">
             <option value="Quetta">Quetta</option>
             <option value="Gwadar">Gwadar</option>
         </optgroup>
-
-        <optgroup label="Capital & Others">
+        <optgroup label="Federal">
             <option value="Islamabad">Islamabad</option>
-            <option value="Muzaffarabad">Muzaffarabad</option>
-            <option value="Gilgit">Gilgit</option>
         </optgroup>
     </select>
 
-    <button onclick="sendData()">Update Now</button>
+    <button onclick="updateData()">Update Now</button>
 
-    <div id="status-msg"></div>
+    <div id="status"></div>
 </div>
 
 <script>
-    async function sendData() {
-        const city = document.getElementById('city-dropdown').value;
-        const msg = document.getElementById('status-msg');
+    async function updateData() {
+        const city = document.getElementById('citySelect').value;
+        const status = document.getElementById('status');
 
         if (!city) {
-            msg.style.color = "red";
-            msg.innerHTML = "Please select a city.";
+            status.style.color = "red";
+            status.innerText = "Please select a city first.";
             return;
         }
 
-        msg.style.color = "#666";
-        msg.innerHTML = "Updating...";
+        status.style.color = "black";
+        status.innerText = "Updating API...";
 
         try {
-            // Your API logic here
-            const response = await fetch('https://your-api-endpoint.com/update', {
+            // Fetch request with API Update
+            const response = await fetch('https://api.example.com/update-city', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ city: city })
+                body: JSON.stringify({ 
+                    system: "Genius-System-Alpha",
+                    updatedCity: city 
+                })
             });
 
-            if(response.ok) {
-                msg.style.color = "green";
-                msg.innerHTML = "Updated successfully!";
+            if (response.ok) {
+                status.style.color = "green";
+                status.innerText = city + " updated successfully!";
             } else {
-                msg.innerHTML = "City selected: " + city;
+                status.style.color = "blue";
+                status.innerText = "City selected: " + city;
             }
-        } catch (e) {
-            msg.innerHTML = "System updated for " + city;
+        } catch (error) {
+            status.style.color = "blue";
+            status.innerText = "Local update: " + city;
         }
     }
 </script>
