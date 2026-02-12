@@ -1,33 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Multi Time Zone Digital Clock</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius World Clock</title>
+    <style>
+        /* Modern UI Design */
+        :root {
+            --bg: #0a0e14;
+            --card: rgba(255, 255, 255, 0.05);
+            --accent: #00d2ff;
+            --text: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            background: radial-gradient(circle at center, #1a202c 0%, #0a0e14 100%);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-weight: 200;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .clock-card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .clock-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+
+        .city {
+            font-size: 1.2rem;
+            color: #a0aec0;
+            margin-bottom: 5px;
+        }
+
+        .time {
+            font-size: 3.5rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: var(--text);
+            margin: 10px 0;
+        }
+
+        .date {
+            color: var(--accent);
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Weather Placeholder */
+        .weather {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #4fd1c5;
+        }
+    </style>
 </head>
 <body>
-  <main class="container">
-    <h1>Multi Time Zone Clock</h1>
 
-    <div class="controls">
-      <label for="tz-select">Add time zone:</label>
-      <select id="tz-select"></select>
-      <button id="add-btn">Add</button>
+    <h1>World Clock</h1>
 
-      <label for="format-toggle" class="toggle-label">
-        <input type="checkbox" id="format-toggle" />
-        12-hour
-      </label>
+    <div class="container" id="clock-container">
+        <div class="clock-card">
+            <div class="city">PAKISTAN (KARACHI)</div>
+            <div id="khi-time" class="time">00:00:00</div>
+            <div id="khi-date" class="date">...</div>
+            <div class="weather">☀ 28°C - Clear Sky</div>
+        </div>
+
+        <div class="clock-card">
+            <div class="city">UNITED KINGDOM (LONDON)</div>
+            <div id="ldn-time" class="time">00:00:00</div>
+            <div id="ldn-date" class="date">...</div>
+            <div class="weather">☁ 8°C - Cloudy</div>
+        </div>
     </div>
 
-    <section id="clocks" class="clocks"></section>
+    <script>
+        function updateTime() {
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            
+            // Karachi
+            const khi = new Date().toLocaleString("en-US", { ...options, timeZone: "Asia/Karachi" });
+            const khiDate = new Date().toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: "Asia/Karachi" });
+            document.getElementById('khi-time').textContent = khi;
+            document.getElementById('khi-date').textContent = khiDate;
 
-    <footer class="footer">
-      Tip: Use IANA timezone names like "America/New_York", "Europe/London", "Asia/Tokyo".
-    </footer>
-  </main>
+            // London
+            const ldn = new Date().toLocaleString("en-US", { ...options, timeZone: "Europe/London" });
+            const ldnDate = new Date().toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: "Europe/London" });
+            document.getElementById('ldn-time').textContent = ldn;
+            document.getElementById('ldn-date').textContent = ldnDate;
+        }
 
-  <script src="script.js"></script>
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
 </body>
-</html>
+  </html>
+  
