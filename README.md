@@ -4,7 +4,9 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=39FF14&center=true&vCenter=true&width=435&lines=Initializing+Genius+System...;Welcome+F.H.+Hussain;The+Digital+Revolution+is+Here;System+Status:+Online" alt="Typing SVG" />
 </p>
 
-[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://fhhussain5653-sudo.github.io/Genius-System-Alpha/)
+<p align="center">
+<a href="https://fhhussain5653-sudo.github.io/Genius-System-Alpha/"><img src="https://img.shields.io/badge/Live-Demo-green.svg" alt="Live Demo" /></a>
+</p>
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=fhhussain5653-sudo&label=SYSTEM+ACCESSES&color=39FF14&style=flat" alt="Visitor Counter" />
